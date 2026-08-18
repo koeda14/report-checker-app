@@ -1,4 +1,10 @@
 import { NextResponse } from 'next/server';
+import { Redis } from '@upstash/redis';
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
 
 export async function POST(req) {
   try {
@@ -8,7 +14,20 @@ export async function POST(req) {
       return NextResponse.json({ error: '文章を入力してください。' }, { status: 400 });
     }
 
-    const isPremium = passcode && passcode.trim() === 'REPORT2026';
+    let isPremium = false;
+
+    // パスコードが入力されている場合、Redisと照合
+    if (passcode && passcode.trim()) {
+      const codeKey = `passcode:${passcode.trim().toUpperCase()}`;
+      const codeData = await redis.get(codeKey);
+
+      if (codeData && codeData.status === 'active') {
+        isPremium = true;
+      } else {
+        return NextResponse.json({ error: 'パスコードが無効または存在しません。' }, { status: 401 });
+      }
+    }
+
     const limit = isPremium ? 10000 : 800;
 
     if (text.length > limit) {

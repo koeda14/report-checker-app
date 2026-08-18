@@ -13,14 +13,16 @@ export default function Home() {
   const STRIPE_PAYMENT_URL = 'https://buy.stripe.com/test_fZucMY5xscuG1WtcVn5wI00';
   const maxChars = isPremium ? 10000 : 800;
 
+  // パスコードの有効化
   const handleUnlock = () => {
-    if (passcode.trim() === 'REPORT2026') {
-      setIsPremium(true);
-      setError('');
-      alert('プレミアム機能（最大10,000文字）が有効化されました！');
-    } else {
-      setError('パスコードが正しくありません。');
+    if (!passcode.trim()) {
+      setError('パスコードを入力してください。');
+      return;
     }
+    // 6桁コードが入力されていればプレミアムモードを有効化（実際の有効性チェックはAPIリクエスト時にサーバー側で照合）
+    setIsPremium(true);
+    setError('');
+    alert('プレミアムコードをセットしました！推敲を実行してください。');
   };
 
   const handleCheck = async () => {
@@ -41,7 +43,7 @@ export default function Home() {
       const response = await fetch('/api/check', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, passcode }),
+        body: JSON.stringify({ text, passcode: passcode.trim() }),
       });
 
       const data = await response.json();
@@ -98,17 +100,18 @@ export default function Home() {
               {!isPremium ? (
                 <div style={{ display: 'flex', gap: '6px' }}>
                   <input
-                    type="password"
-                    placeholder="パスコード"
+                    type="text"
+                    placeholder="6桁パスコード"
                     value={passcode}
-                    onChange={(e) => setPasscode(e.target.value)}
-                    style={{ width: '100%', padding: '6px 10px', fontSize: '12px', border: '1px solid #cbd5e1', borderRadius: '6px', outline: 'none' }}
+                    onChange={(e) => setPasscode(e.target.value.toUpperCase())}
+                    maxLength={8}
+                    style={{ width: '100%', padding: '6px 10px', fontSize: '12px', border: '1px solid #cbd5e1', borderRadius: '6px', outline: 'none', textTransform: 'uppercase', letterSpacing: '1px' }}
                   />
                   <button
                     onClick={handleUnlock}
                     style={{ padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', backgroundColor: '#334155', color: '#ffffff', border: 'none', borderRadius: '6px', cursor: 'pointer', whiteSpace: 'nowrap' }}
                   >
-                    解除
+                    適用
                   </button>
                 </div>
               ) : (
