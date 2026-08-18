@@ -10,19 +10,16 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Stripeの決済リンク
   const STRIPE_PAYMENT_URL = 'https://buy.stripe.com/test_fZucMY5xscuG1WtcVn5wI00';
-
   const maxChars = isPremium ? 10000 : 800;
 
-  // パスコード認証
   const handleUnlock = () => {
     if (passcode.trim() === 'REPORT2026') {
       setIsPremium(true);
       setError('');
-      alert('プレミアム機能（最大10,000文字）が解放されました！');
+      alert('プレミアム機能（最大10,000文字）が有効化されました！');
     } else {
-      setError('パスコードが正しくありません。購入完了時のパスコードを入力してください。');
+      setError('パスコードが正しくありません。');
     }
   };
 
@@ -62,136 +59,128 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-800 p-6 md:p-12">
-      <div className="max-w-4xl mx-auto">
+    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', padding: '40px 16px', fontFamily: 'sans-serif', color: '#1e293b' }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         
-        {/* ヘッダー */}
-        <header className="mb-8 text-center">
-          <div className="inline-block px-3 py-1 mb-3 text-xs font-semibold bg-indigo-100 text-indigo-700 rounded-full">
+        {/* ヘッダーエリア */}
+        <header style={{ marginBottom: '24px' }}>
+          <div style={{ display: 'inline-block', backgroundColor: '#e0e7ff', color: '#4338ca', fontSize: '12px', fontWeight: 'bold', padding: '4px 12px', borderRadius: '9999px', marginBottom: '8px' }}>
             大学生向け レポート・論文 専門AI推敲
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-2">
-            レポートAIチェッカー
-          </h1>
-          <p className="text-slate-600 text-sm md:text-base">
-            AI特有の定型表現や不自然な論理展開を検出し、学術的で自然な「だ・である」調へリライトします。
-          </p>
-        </header>
-
-        {/* プレミアムバナー / パスコード入力 */}
-        <div className="mb-6 p-4 rounded-xl border bg-white shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-left w-full md:w-auto">
-            <div className="flex items-center gap-2">
-              <span className={`px-2 py-0.5 text-xs font-bold rounded ${isPremium ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-slate-100 text-slate-700'}`}>
-                {isPremium ? '★ プレミアムプラン適用中' : '無料プラン（800文字）'}
-              </span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
+            <div>
+              <h1 style={{ fontSize: '28px', fontWeight: 'bold', margin: '0 0 8px 0', color: '#0f172a' }}>
+                レポートAIチェッカー
+              </h1>
+              <p style={{ fontSize: '14px', color: '#64748b', margin: 0 }}>
+                AI特有の定型表現や不自然な論理展開を検出し、学術的で自然な「だ・である」調へリライトします。
+              </p>
             </div>
-            <p className="text-xs text-slate-500 mt-1">
-              {isPremium ? '期末レポート・卒業論文向けの長文推敲モード（最大10,000文字）' : '期末レポートや卒論などの長文（最大10,000文字）はプレミアムチケットが必要です。'}
-            </p>
-          </div>
 
-          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
-            {!isPremium ? (
-              <>
-                <a
-                  href={STRIPE_PAYMENT_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 rounded-lg shadow-sm transition text-center"
-                >
-                  プレミアムチケットを購入（¥500）
-                </a>
-                <div className="flex items-center gap-1">
+            {/* プレミアムステータス / チケット購入 */}
+            <div style={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '12px 16px', textAlign: 'right', minWidth: '260px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <span style={{ fontSize: '12px', fontWeight: 'bold', color: isPremium ? '#15803d' : '#64748b' }}>
+                  {isPremium ? '★ プレミアム適用中' : '無料プラン（800文字）'}
+                </span>
+                {!isPremium && (
+                  <a
+                    href={STRIPE_PAYMENT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ fontSize: '11px', fontWeight: 'bold', color: '#b45309', backgroundColor: '#fef3c7', padding: '4px 8px', borderRadius: '6px', textDecoration: 'none', border: '1px solid #fde68a' }}
+                  >
+                    1万字解放（¥500）↗
+                  </a>
+                )}
+              </div>
+
+              {!isPremium ? (
+                <div style={{ display: 'flex', gap: '6px' }}>
                   <input
                     type="password"
                     placeholder="パスコード"
                     value={passcode}
                     onChange={(e) => setPasscode(e.target.value)}
-                    className="p-2 text-xs border rounded-lg w-28 bg-slate-50 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    style={{ width: '100%', padding: '6px 10px', fontSize: '12px', border: '1px solid #cbd5e1', borderRadius: '6px', outline: 'none' }}
                   />
                   <button
                     onClick={handleUnlock}
-                    className="px-3 py-2 text-xs font-semibold bg-slate-800 text-white hover:bg-slate-700 rounded-lg transition"
+                    style={{ padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', backgroundColor: '#334155', color: '#ffffff', border: 'none', borderRadius: '6px', cursor: 'pointer', whiteSpace: 'nowrap' }}
                   >
                     解除
                   </button>
                 </div>
-              </>
-            ) : (
-              <span className="text-xs font-bold text-green-600 bg-green-50 px-3 py-1.5 rounded-lg border border-green-200">
-                ✓ 10,000文字解放済み
-              </span>
-            )}
+              ) : (
+                <span style={{ fontSize: '11px', color: '#16a34a', fontWeight: 'bold' }}>✓ 期末レポート・卒論モード（10,000文字）</span>
+              )}
+            </div>
           </div>
-        </div>
+        </header>
 
-        {/* メイン入力エリア */}
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-8">
-          <div className="flex justify-between items-center mb-2">
-            <label className="text-sm font-semibold text-slate-700">対象テキスト</label>
-            <span className={`text-xs font-medium ${text.length > maxChars ? 'text-red-500 font-bold' : 'text-slate-500'}`}>
+        {/* 入力フォーム */}
+        <div style={{ backgroundColor: '#ffffff', borderRadius: '16px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <label style={{ fontSize: '14px', fontWeight: 'bold', color: '#334155' }}>対象テキスト</label>
+            <span style={{ fontSize: '12px', color: text.length > maxChars ? '#ef4444' : '#64748b', fontWeight: text.length > maxChars ? 'bold' : 'normal' }}>
               {text.length.toLocaleString()} / {maxChars.toLocaleString()} 文字
             </span>
           </div>
 
           <textarea
             rows={10}
-            className="w-full p-4 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm leading-relaxed"
+            style={{ width: '100%', boxSizing: 'border-box', padding: '14px', border: '1px solid #cbd5e1', borderRadius: '10px', fontSize: '14px', lineHeight: '1.6', outline: 'none', resize: 'vertical' }}
             placeholder="ここにチェックしたいレポートの本文を貼り付けてください..."
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
 
           {error && (
-            <div className="mt-4 p-3 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm">
+            <div style={{ marginTop: '12px', padding: '10px 14px', backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', color: '#b91c1c', fontSize: '13px' }}>
               {error}
             </div>
           )}
 
-          <div className="mt-4 flex justify-end">
+          <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'flex-end' }}>
             <button
               onClick={handleCheck}
               disabled={loading || !text.trim() || text.length > maxChars}
-              className={`px-6 py-3 rounded-xl font-bold text-white shadow transition flex items-center gap-2 ${
-                loading || !text.trim() || text.length > maxChars
-                  ? 'bg-slate-300 cursor-not-allowed'
-                  : 'bg-indigo-600 hover:bg-indigo-700 active:scale-95'
-              }`}
+              style={{
+                padding: '12px 28px',
+                fontSize: '15px',
+                fontWeight: 'bold',
+                color: '#ffffff',
+                backgroundColor: loading || !text.trim() || text.length > maxChars ? '#94a3b8' : '#4f46e5',
+                border: 'none',
+                borderRadius: '10px',
+                cursor: loading || !text.trim() || text.length > maxChars ? 'not-allowed' : 'pointer',
+                transition: 'background-color 0.2s',
+                boxShadow: '0 2px 4px rgba(79, 70, 229, 0.2)'
+              }}
             >
-              {loading ? (
-                <>
-                  <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                  </svg>
-                  <span>AI推敲中...</span>
-                </>
-              ) : (
-                <span>AIで推敲・チェックする</span>
-              )}
+              {loading ? 'AI推敲中...' : 'AIで推敲・チェックする'}
             </button>
           </div>
         </div>
 
         {/* 出力結果エリア */}
         {result && (
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-12">
-            <h2 className="text-lg font-bold text-slate-800 mb-4 pb-2 border-b border-slate-100 flex items-center gap-2">
-              <span>診断・推敲結果</span>
+          <div style={{ backgroundColor: '#ffffff', borderRadius: '16px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '32px' }}>
+            <h2 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 16px 0', paddingBottom: '10px', borderBottom: '1px solid #f1f5f9', color: '#0f172a' }}>
+              推敲・チェック結果
             </h2>
-            <div className="whitespace-pre-wrap text-sm text-slate-700 leading-relaxed font-sans bg-slate-50 p-4 rounded-xl border border-slate-100">
+            <div style={{ whiteSpace: 'pre-wrap', fontSize: '14px', lineHeight: '1.7', backgroundColor: '#f8fafc', padding: '16px', borderRadius: '10px', border: '1px solid #e2e8f0', color: '#334155' }}>
               {result}
             </div>
           </div>
         )}
 
-        {/* フッター / アフィリエイト・規約プレースホルダー */}
-        <footer className="text-center text-xs text-slate-400 border-t border-slate-200 pt-8 pb-4">
-          <p>© 2026 レポートAIチェッカー. All rights reserved.</p>
+        {/* フッター */}
+        <footer style={{ textAlign: 'center', fontSize: '12px', color: '#94a3b8', borderTop: '1px solid #e2e8f0', paddingTop: '24px' }}>
+          <p style={{ margin: 0 }}>© 2026 レポートAIチェッカー. All rights reserved.</p>
         </footer>
 
       </div>
-    </main>
+    </div>
   );
 }
