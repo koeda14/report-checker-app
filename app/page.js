@@ -10,7 +10,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const STRIPE_PAYMENT_URL = 'https://buy.stripe.com/test_fZucMY5xscuG1WtcVn5wI00';
+  const STRIPE_PAYMENT_URL = 'https://report-checker-web-git-main-koeda.vercel.app/success?session_id={CHECKOUT_SESSION_ID}';
   const maxChars = isPremium ? 10000 : 800;
 
   // パスコードの有効化
