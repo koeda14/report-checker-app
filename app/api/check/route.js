@@ -31,8 +31,8 @@ export async function POST(req) {
 ${text}
 `;
 
-    // Google Gemini 1.5 Flash を呼び出し
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // Google Gemini 2.0 Flash を呼び出し
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(url, {
       method: 'POST',
