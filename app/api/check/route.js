@@ -2,14 +2,21 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req) {
   try {
-    const { text } = await req.json();
+    const { text, passcode } = await req.json();
 
     if (!text || typeof text !== 'string') {
       return NextResponse.json({ error: '文章を入力してください。' }, { status: 400 });
     }
 
-    if (text.length > 800) {
-      return NextResponse.json({ error: '無料枠の上限（800文字）を超えています。' }, { status: 400 });
+    const isPremium = passcode && passcode.trim() === 'REPORT2026';
+    const limit = isPremium ? 10000 : 800;
+
+    if (text.length > limit) {
+      return NextResponse.json({ 
+        error: isPremium 
+          ? 'プレミアム枠の上限（10,000文字）を超えています。' 
+          : '無料枠の上限（800文字）を超えています。プレミアムチケットをご利用ください。' 
+      }, { status: 400 });
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
@@ -31,7 +38,6 @@ export async function POST(req) {
 ${text}
 `;
 
-    // Google Gemini 3.6 Flash を呼び出し
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(url, {
