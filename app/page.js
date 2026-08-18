@@ -10,8 +10,9 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const STRIPE_PAYMENT_URL = 'https://buy.stripe.com/test_eVq5kwbVQ66i58F08B5wI03';
-  const maxChars = isPremium ? 10000 : 800;
+// Stripeの決済リンク
+  const STRIPE_PAYMENT_URL = 'https://buy.stripe.com/test_bJe9AM5xs7am8kRf3v5wI04';
+    const maxChars = isPremium ? 10000 : 800;
 
   // パスコードの有効化
   const handleUnlock = () => {
