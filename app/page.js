@@ -11,7 +11,7 @@ export default function Home() {
   const [error, setError] = useState('');
 
 // Stripeの決済リンク
-  const STRIPE_PAYMENT_URL = 'https://buy.stripe.com/test_bJe9AM5xs7am8kRf3v5wI04';
+  const STRIPE_PAYMENT_URL = 'https://buy.stripe.com/test_6oU8wI5xs7am0Sp5sV5wI05';
     const maxChars = isPremium ? 10000 : 800;
 
   // パスコードの有効化
